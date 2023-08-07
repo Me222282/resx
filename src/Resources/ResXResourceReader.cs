@@ -32,7 +32,7 @@ namespace System.Resources
         private readonly ITypeResolutionService _typeResolver;
         private readonly IAliasResolver _aliasResolver;
 
-        private ListDictionary _resData;
+        internal ListDictionary _resData;
         private ListDictionary _resMetadata;
         private string _resHeaderVersion;
         private string _resHeaderMimeType;

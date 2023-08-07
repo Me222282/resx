@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Specialized;
 using System.IO;
 using System.Resources;
 
@@ -38,9 +39,16 @@ namespace resx
             Console.WriteLine($"Invalid argument {args[0]}.");
         }
         
-        private static void CreateResx(string path)
+        private static void CreateResx(string path, ListDictionary starting = null)
         {
             ResXResourceWriter rrw = new ResXResourceWriter(new FileStream(path, FileMode.Create));
+            
+            if (starting != null)
+            {
+                AddStarting(rrw, starting);
+            }
+            
+            string fullPath = Path.GetFullPath(path);
             
             while (true)
             {
@@ -93,13 +101,21 @@ namespace resx
                         new ResXDataNode(name,
                             new ResXFileRef
                             (
-                                rPath,
+                                Path.GetRelativePath(Path.GetFullPath(rPath), fullPath),
                                 type == "txt" ? typeof(string).FullName : typeof(byte[]).FullName
                             )
                         )
                     );
                     break;
                 }
+            }
+        }
+        
+        private static void AddStarting(ResXResourceWriter rrw, ListDictionary starting)
+        {
+            foreach (DictionaryEntry entry in starting)
+            {
+                rrw.AddResource((string)entry.Key, entry.Value);
             }
         }
         
@@ -111,9 +127,14 @@ namespace resx
                 return;
             }
             
-            ResXResourceReader rrr = new ResXResourceReader(new FileStream(path, FileMode.Open));
+            FileStream stream = new FileStream(path, FileMode.Open);
+            ResXResourceReader rrr = new ResXResourceReader(stream);
+            // Read data to dictionary
+            rrr.GetEnumerator();
+            rrr.Close();
+            stream.Close();
             
-            
+            CreateResx(path, rrr._resData);
         }
         
         private static void ExitInfo(string path)
