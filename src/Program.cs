@@ -9,8 +9,6 @@ namespace resx
 {
     class Program
     {
-        private static string[] Options;
-        
         static void Main(string[] args)
         {
             if (args.Length == 1 && args[0] == "--help")
