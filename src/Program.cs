@@ -25,12 +25,6 @@ namespace resx
             
             string file = args[1];
             
-            if (!File.Exists(file))
-            {
-                Console.WriteLine($"File {file} does not exist.");
-                return;
-            }
-            
             file = Path.GetFullPath(file);
             
             if (args[0] == "new")
@@ -41,6 +35,12 @@ namespace resx
                 }
                 
                 CreateResx(file);
+                return;
+            }
+            
+            if (!File.Exists(file))
+            {
+                Console.WriteLine($"File {file} does not exist.");
                 return;
             }
             
@@ -198,9 +198,6 @@ namespace resx
                         Console.WriteLine("File does not exist.");
                         continue;
                     }
-                    
-                    Console.WriteLine(fullPath);
-                    Console.WriteLine(Path.GetFullPath(rPath));
                     
                     rrw.AddResource(name,
                         new ResXDataNode(name,
