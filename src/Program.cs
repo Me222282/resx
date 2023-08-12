@@ -13,7 +13,7 @@ namespace resx
         {
             if (args.Length == 1 && args[0] == "--help")
             {
-                // HELP
+                Console.WriteLine("Help coming when I can be bothered.");
                 return;
             }
             
@@ -91,6 +91,18 @@ namespace resx
                 return;
             }
             
+            if (args[0] == "generate")
+            {
+                if (args.Length != 4)
+                {
+                    Console.WriteLine("Invalid arguments.");
+                    return;
+                }
+                
+                CsCodeGenerator.Generate(file, args[2], args[3]);
+                return;
+            }
+            
             Console.WriteLine($"Invalid argument {args[0]}.");
         }
         
@@ -125,7 +137,7 @@ namespace resx
         
         private static void CreateResx(string path, ListDictionary starting = null)
         {
-            ResXResourceWriter rrw = new ResXResourceWriter(new FileStream(path, FileMode.Create));
+            ResXResourceWriter rrw = new ResXResourceWriter(new FileStream(path, FileMode.OpenOrCreate));
             
             string fullPath = Path.GetDirectoryName(path);
             
@@ -146,7 +158,7 @@ namespace resx
                         cki.Modifiers == ConsoleModifiers.Control)
                     {
                         rrw.Close();
-                        //ExitInfo(path);
+                        Console.WriteLine();
                         return;
                     }
                     
@@ -170,7 +182,7 @@ namespace resx
                         cki.Modifiers == ConsoleModifiers.Control)
                     {
                         rrw.Close();
-                        //ExitInfo(path);
+                        Console.WriteLine();
                         return;
                     }
                     string value = cki.KeyChar + Console.ReadLine();
@@ -188,7 +200,7 @@ namespace resx
                         cki.Modifiers == ConsoleModifiers.Control)
                     {
                         rrw.Close();
-                        //ExitInfo(path);
+                        Console.WriteLine();
                         return;
                     }
                     string rPath = cki.KeyChar + Console.ReadLine();
@@ -375,18 +387,11 @@ namespace resx
             }
             
             project = project.Insert(end - 1, @$"  <ItemGroup>
-    <Compile Update=""{dir}\{file}.Designer.cs"">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>{name}</DependentUpon>
-    </Compile>
+    <EmbeddedResource Update=""{dir}\{name}"" />
   </ItemGroup>
-
+  
   <ItemGroup>
-    <EmbeddedResource Update=""{dir}\{name}"">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>{file}.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <PackageReference Include=""System.Resources.Extensions"" Version=""5.0.0"" />
   </ItemGroup>
   ");
             

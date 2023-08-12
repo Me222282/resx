@@ -122,6 +122,12 @@ namespace System.Resources
             }
 
             result += TypeName;
+            
+            if (!result.Contains("mscorlib"))
+            {
+                result += ", mscorlib, Version=1.0";
+            }
+            
             if (TextFileEncoding != null)
             {
                 result += (";" + TextFileEncoding.WebName);

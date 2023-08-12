@@ -186,10 +186,10 @@ namespace System.Resources
             {
                 // Only cache types from the shared framework  because they don't need to update.
                 // For simplicity, don't cache custom types
-                if (IsDotNetAssembly(result.Assembly.Location))
-                {
+                //if (IsDotNetAssembly(result.Assembly.Location))
+                //{
                     _cachedTypes[name] = result;
-                }
+                //}
             }
 
             return result;

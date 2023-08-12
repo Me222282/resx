@@ -23,7 +23,7 @@ namespace System.Resources
     {
         private static readonly char[] s_specialChars = new char[] { ' ', '\r', '\n' };
 
-        private DataNodeInfo _nodeInfo;
+        internal DataNodeInfo _nodeInfo;
 
         private string _name;
         private string _comment;
